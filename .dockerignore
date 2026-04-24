@@ -1,0 +1,13 @@
+**/.venv
+**/__pycache__
+**/*.py[cod]
+**/node_modules
+frontend/dist
+chroma_db
+logs
+notebooks
+.git
+.env
+*.pkl
+*.joblib
+*.md

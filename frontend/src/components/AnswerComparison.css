@@ -1,0 +1,57 @@
+.answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 680px) {
+  .answer-grid { grid-template-columns: 1fr; }
+}
+
+.answer-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.answer-card--highlighted {
+  border-top: 3px solid var(--color-primary);
+}
+
+.answer-card-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.answer-card-subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  margin-top: 0.125rem;
+}
+
+.answer-card-text {
+  flex: 1;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+.answer-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.meta-dot {
+  opacity: 0.4;
+}

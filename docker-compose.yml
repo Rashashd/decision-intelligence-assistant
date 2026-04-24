@@ -1,0 +1,49 @@
+services:
+  # Init container: populate ChromaDB once, then exit
+  ingest:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command:
+      - python
+      - -m
+      - app.utils.ingest
+      - --skip-if-exists
+      - --data
+      - /app/data/inbound_processed.pkl
+    volumes:
+      - chroma_data:/app/chroma_db
+      - ./data:/app/data:ro
+    env_file: .env
+    environment:
+      CHROMA_PERSIST_DIR: /app/chroma_db
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/app/chroma_db
+      - logs_data:/app/logs
+    env_file: .env
+    environment:
+      CHROMA_PERSIST_DIR: /app/chroma_db
+      LOG_DIR: /app/logs
+    depends_on:
+      ingest:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  chroma_data:
+  logs_data:

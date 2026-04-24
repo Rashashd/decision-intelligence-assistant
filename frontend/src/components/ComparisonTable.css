@@ -1,0 +1,88 @@
+.comparison-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.comparison-heading {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.comparison-table-scroll {
+  overflow-x: auto;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.comparison-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  padding: 0 0.75rem 0.625rem;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.comparison-table th:first-child { padding-left: 0; }
+
+.comparison-table td {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.comparison-table td:first-child { padding-left: 0; }
+
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.col-approach {
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.col-num {
+  text-align: right;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.role-chip {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.role-chip--classifier {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.role-chip--generator {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.na {
+  color: var(--color-muted);
+}
+
+.free {
+  color: #15803d;
+  font-weight: 500;
+}

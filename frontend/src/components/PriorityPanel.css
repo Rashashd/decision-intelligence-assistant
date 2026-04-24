@@ -1,0 +1,64 @@
+.priority-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.panel-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  margin-bottom: 0.875rem;
+}
+
+.priority-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.badge--urgent {
+  background: var(--color-urgent-bg);
+  border: 1px solid var(--color-urgent-border);
+}
+
+.badge--normal {
+  background: var(--color-normal-bg);
+  border: 1px solid var(--color-normal-border);
+}
+
+.badge-source {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.badge-label {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.badge--urgent .badge-label { color: var(--color-urgent); }
+.badge--normal .badge-label { color: var(--color-normal); }
+
+.badge-conf {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.badge-latency {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
