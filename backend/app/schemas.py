@@ -17,6 +17,7 @@ class LLMAnswer(BaseModel):
     text: str
     latency_ms: float
     cost_usd: float
+    accuracy_score: float | None = None  # 0-1, RAG only; None for non-RAG
 
 
 class PriorityPrediction(BaseModel):

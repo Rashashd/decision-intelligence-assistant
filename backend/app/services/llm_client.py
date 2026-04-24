@@ -31,9 +31,19 @@ _ANSWER_SYSTEM_PROMPT = (
     "If no relevant information can be found in the provided cases, answer based on your general knowledge and provide sources if possible."
 )
 
-# Internal structured output schemas 
+_RAG_SYSTEM_PROMPT = (
+    _ANSWER_SYSTEM_PROMPT
+    + " After answering, rate accuracy_score (0.0-1.0): how well your answer is grounded "
+    "in the provided cases (1.0 = fully from context, 0.0 = not at all)."
+)
+
+# Internal structured output schemas
 class _AnswerOutput(BaseModel):
     answer: str
+
+class _RagAnswerOutput(BaseModel):
+    answer: str
+    accuracy_score: float  # 0-1: how well the answer is grounded in the provided cases
 
 class _PriorityOutput(BaseModel):
     label: Literal["urgent", "normal"]
@@ -94,19 +104,21 @@ def _openai_rag_answer(query: str, tickets: list[RetrievedTicket]) -> LLMAnswer:
             model=get_settings().openai_model,
             max_tokens=512,
             messages=[
-                {"role": "system", "content": _ANSWER_SYSTEM_PROMPT},
+                {"role": "system", "content": _RAG_SYSTEM_PROMPT},
                 {"role": "user", "content": user_msg},
             ],
-            response_format=_AnswerOutput,
+            response_format=_RagAnswerOutput,
         )
     except openai.RateLimitError as exc:
         raise HTTPException(status_code=429, detail="OpenAI rate limit") from exc
     except openai.APIError as exc:
         raise HTTPException(status_code=502, detail="OpenAI API error") from exc
+    parsed = resp.choices[0].message.parsed  # type: ignore[union-attr]
     return LLMAnswer(
-        text=resp.choices[0].message.parsed.answer,  # type: ignore[union-attr]
+        text=parsed.answer,
         latency_ms=round((time.perf_counter() - t0) * 1000, 2),
         cost_usd=_oai_cost(resp.usage),  # type: ignore[arg-type]
+        accuracy_score=round(parsed.accuracy_score, 2),
     )
 
 
@@ -181,8 +193,29 @@ def _gemini_answer(system: str, user_msg: str) -> tuple[str, object, float]:
 def _gemini_rag_answer(query: str, tickets: list[RetrievedTicket]) -> LLMAnswer:
     context = _format_context(tickets)
     user_msg = f"Similar past cases:\n\n{context}\n\n---\nQuestion: {query}"
-    answer, usage, latency_ms = _gemini_answer(_ANSWER_SYSTEM_PROMPT, user_msg)
-    return LLMAnswer(text=answer, latency_ms=latency_ms, cost_usd=_gem_cost(usage))
+    genai = _get_gemini()
+    prompt = (
+        f"{_RAG_SYSTEM_PROMPT}\n\n{user_msg}\n\n"
+        'Respond with JSON: {"answer": "your response", "accuracy_score": 0.0}'
+    )
+    t0 = time.perf_counter()
+    try:
+        model = genai.GenerativeModel(get_settings().gemini_model)
+        resp = model.generate_content(
+            prompt,
+            generation_config=genai.GenerationConfig(response_mime_type="application/json"),
+        )
+    except Exception as exc:
+        logger.exception("Gemini API error")
+        raise HTTPException(status_code=502, detail="Gemini API error") from exc
+    latency_ms = round((time.perf_counter() - t0) * 1000, 2)
+    data = json.loads(resp.text)
+    return LLMAnswer(
+        text=data["answer"],
+        latency_ms=latency_ms,
+        cost_usd=_gem_cost(resp.usage_metadata),
+        accuracy_score=round(float(data.get("accuracy_score", 0.0)), 2),
+    )
 
 
 def _gemini_non_rag_answer(query: str) -> LLMAnswer:

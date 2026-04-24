@@ -26,6 +26,12 @@ function AnswerCard({ title, subtitle, answer, highlighted }) {
         <p className="answer-card-subtitle">{subtitle}</p>
       </div>
       <p className="answer-card-text">{answer.text}</p>
+      {answer.accuracy_score != null && (
+        <div className="answer-card-accuracy">
+          <span className="accuracy-label">Accuracy</span>
+          <span className="accuracy-value">{Math.round(answer.accuracy_score * 100)}%</span>
+        </div>
+      )}
       <div className="answer-card-meta">
         <span>{answer.latency_ms.toFixed(0)} ms</span>
         <span className="meta-dot">·</span>

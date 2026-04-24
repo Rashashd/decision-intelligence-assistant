@@ -55,3 +55,20 @@
 .meta-dot {
   opacity: 0.4;
 }
+
+.answer-card-accuracy {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.accuracy-label {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.accuracy-value {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
