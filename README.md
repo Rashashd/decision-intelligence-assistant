@@ -40,6 +40,7 @@ You need:
 - **uv** (Python package manager): `pip install uv`
 - **Docker Desktop** (only if you want to run via Docker): [download here](https://www.docker.com/products/docker-desktop/)
 - An **OpenAI API key**: [get one here](https://platform.openai.com/api-keys)
+- **Twitter Customer Support Dataset**: you can download it from: [download here](kaggle.com/datasets/thoughtvector/customer-support-on-twitter) and put it in the folder *data*
 
 ---
 

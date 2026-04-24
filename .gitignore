@@ -27,6 +27,7 @@ Thumbs.db
 # Generated artifacts
 *.pkl
 *.joblib
+*.csv
 
 # Node
 node_modules/
